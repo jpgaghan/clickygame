@@ -5,6 +5,7 @@ import Jumbotron from "./components/Jumbotron"
 import Footer from "./components/Footer";
 import Friends from "./friends.json";
 import Card from "./components/FriendCard";
+import _ from "lodash";
 // import Image from "./components/Image"
 // import Container from ".components/Container"
 
@@ -16,12 +17,9 @@ class App extends Component {
     topscore: 0
   };
 
-  // cardClick = () => {
-  //   console.log(this.state)
-  // };
-
   correctGuess = (clickedid, Friends, score, topscore) => {
-    Friends = Friends.map(({id, clickstatus, image}) => {if(clickedid === id) { clickstatus = true}})
+    console.log(Friends)
+    Friends = Friends.map(({id, clickstatus, image}) => {if(clickedid === id) { return {id, clickstatus: true, image}} else { return {id, clickstatus, image}}});
     console.log(Friends)
     if (topscore <= score) {
     this.setState({
@@ -39,7 +37,7 @@ class App extends Component {
   };
 
   incorrectGuess = (Friends, score, topscore) => {
-    Friends = Friends.map(({id, clickstatus, image}) => {if(clickstatus) { clickstatus = false}})
+    Friends = Friends.map(({id, clickstatus, image}) => {if(clickstatus) { return {id, clickstatus: false, image}} else { return {id, clickstatus, image}}});
     console.log(Friends)
     this.setState({
       Friends,
@@ -57,13 +55,14 @@ class App extends Component {
   render() {
     return(
       <Wrapper>
-        <Header />
+        <Header score={this.state.score} topscore={this.state.topscore} />
         <Jumbotron />
           <div class = "container">
-            {Friends.map(({id, image, clickstatus}) => <Card id={id} image={image} clickstatus ={clickstatus} onClick={() => this.cardClick(id, clickstatus)}/>)}
+            {_.shuffle(this.state.Friends).map(({id, image, clickstatus}) => <Card id={id} image={image} clickstatus ={clickstatus} onClick={() => this.cardClick(id, clickstatus)}/>)}
           </div>
         <Footer />
-      </Wrapper>)
+      </Wrapper>
+      )
   } 
 }
 

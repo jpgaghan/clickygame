@@ -1,12 +1,11 @@
 import React from "react";
 
-const Navbar = () => (
+const Navbar = props => (
     <header>
       <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <a class="navbar-brand text-white mx-auto align-middle">Fixed navbar</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
+        <h1 class="navbar-brand text-white mx-auto align-middle">Fixed navbar</h1>
+        <p class = "text-white mr-1">Current Score: {props.score}</p>
+        <p class = "text-white">Top Score: {props.topscore}</p>
       </nav>
     </header>
 );
