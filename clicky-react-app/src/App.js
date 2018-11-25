@@ -14,27 +14,39 @@ class App extends Component {
   state = {
     Friends,
     score: 0,
-    topscore: 0
+    topscore: 0,
+    headline: "Click Away"
   };
 
   correctGuess = (clickedid, Friends, score, topscore) => {
-    console.log(Friends)
     Friends = Friends.map(({id, clickstatus, image}) => {if(clickedid === id) { return {id, clickstatus: true, image}} else { return {id, clickstatus, image}}});
-    console.log(Friends)
-    if (topscore <= score) {
-    this.setState({
-      Friends,
-      score: score+=1,
-      topscore: topscore+=1
-    })
-  } else {
-    this.setState({
-      Friends,
-      score: score+=1,
-      topscore
-    })
-  }
+    switch(true) {
+      case score === 15:
+        this.setState({
+          Friends,
+          score: 0,
+          topscore: 0,
+          headline: "You Won Congrats!"
+        })
+        break;
+      case score >= topscore:
+      console.log(score, topscore)
+        this.setState({
+          Friends,
+          score: score+=1,
+          topscore: topscore+=1,
+          headline: "Click Away"
+        })
+        break;
+      default:
+        this.setState({
+          Friends,
+          score: score+=1,
+          topscore,
+          headline: "Click Away"
+        })
   };
+};
 
   incorrectGuess = (Friends, score, topscore) => {
     Friends = Friends.map(({id, clickstatus, image}) => {if(clickstatus) { return {id, clickstatus: false, image}} else { return {id, clickstatus, image}}});
@@ -42,7 +54,8 @@ class App extends Component {
     this.setState({
       Friends,
       score: 0,
-      topscore
+      topscore,
+      headline: "You Lost. Try Again!"
     })
   };
 
@@ -55,8 +68,8 @@ class App extends Component {
   render() {
     return(
       <Wrapper>
-        <Header score={this.state.score} topscore={this.state.topscore} />
-        <Jumbotron />
+        <Header score={this.state.score} topscore={this.state.topscore}/>
+        <Jumbotron headline={this.state.headline}/>
           <div class = "container">
             {_.shuffle(this.state.Friends).map(({id, image, clickstatus}) => <Card id={id} image={image} clickstatus ={clickstatus} onClick={() => this.cardClick(id, clickstatus)}/>)}
           </div>
